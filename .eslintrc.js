@@ -15,9 +15,12 @@ module.exports = {
     ecmaVersion: 13,
     sourceType: 'module',
   },
+  parser: '@babel/eslint-parser',
   plugins: [
     'react',
   ],
   rules: {
+    'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
+    'react/function-component-definition': 0,
   },
 };
