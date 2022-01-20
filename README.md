@@ -29,4 +29,6 @@ steps followed for initail project setup
   - https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/function-component-definition.md
 12)Restrict file extensions that may contain JSX we need to add rule in eslint configuration
   - https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-filename-extension.md
+13)Added the rules for allowing the props spreading
+  - https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-props-no-spreading.md
   

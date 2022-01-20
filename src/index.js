@@ -1,22 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import weatherServer from './server';
+import Weather from './weather';
 
-const App = () => (
-  <div>
-    <h1>
-      hello from react
-    </h1>
-    <h2
-      style={{
-        backgroundColor: 'red',
-        color: '#fff',
-      }}
-    >
-      hello from style
-    </h2>
-  </div>
-);
+weatherServer();
+
 ReactDOM.render(
-  <App />,
+  <Weather />,
   document.getElementById('root'),
 );
