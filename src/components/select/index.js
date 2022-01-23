@@ -1,11 +1,11 @@
 import React from 'react';
 
-const Select = ({ label, id, options }) => (
+const Select = ({ label, options, ...props }) => (
   <div className="weather-units flex-none p-2 bg-[#ffffff] pt-4 pb-4 rounded-lg flex flex-col">
-    <label htmlFor={id}>
+    <label htmlFor={props.id}>
       {label}
     </label>
-    <select className="select-units" id={id}>
+    <select className="select-units" {...props}>
       {
         options.map((option) => (
           <option value={option.value} key={option.value}>

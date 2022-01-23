@@ -6,6 +6,8 @@ import '../index.css';
 const Weather = () => {
   const [location, setLocation] = useState('');
   const [cities, setCities] = useState([]);
+  const [selectedCity, setSelectedCity] = useState(null);
+  const [unit, setUnit] = useState('C');
   const units = [
     {
       value: 'C',
@@ -26,10 +28,24 @@ const Weather = () => {
       console.log(error);
     }
   };
+  const getCityInfo = async (cityId) => {
+    try {
+      const res = await fetch(`https://api.weatherserver.com/weather/current/${cityId}/${unit}`);
+      const json = await res.json();
+      console.log(json);
+      setSelectedCity(json);
+      setLocation('');
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const onChangeLocationInput = (event) => {
     const city = event.target.value;
     setLocation(city);
     loadCities(city);
+  };
+  const onUnitChange = (event) => {
+    setUnit(event.target.value);
   };
   return (
     <div className="flex justify-center">
@@ -39,27 +55,30 @@ const Weather = () => {
         </div>
         <div className="weather-input-parent flex">
           <Input label="Location" id="location-txt" onChange={onChangeLocationInput} value={location} />
-          <Select label="Units" id="temp-units" options={units} />
+          <Select label="Units" id="temp-units" options={units} value={unit} onChange={onUnitChange} />
         </div>
         {location.length > 0
           && (
           <div className="weather-city-dropdown relative">
             <div className="absolute dropdown-result bg-[#FFFFFF] flex w-full h-20 p-2">
-              <ul className="flex items-center justify-center space-x-6 px-4">
+              <div className="flex items-center justify-center space-x-6 px-4">
                 {cities.length === 0 && (
-                <ul className="flex items-center justify-center space-x-6 px-4">
                   <li><a href="#!">city details not found</a></li>
-                </ul>
                 )}
                 {
                     cities.map((city) => (
-                      <li className="dropdown-results" key={city.name}>
-                        <a href="!#">{city.name}</a>
-                      </li>
+                      <div
+                        className="dropdown-results"
+                        key={city.name}
+                        onClick={() => getCityInfo(city.id)}
+                        role="button"
+                      >
+                        {city.name}
+                      </div>
                     ))
                   }
 
-              </ul>
+              </div>
             </div>
           </div>
           )}
