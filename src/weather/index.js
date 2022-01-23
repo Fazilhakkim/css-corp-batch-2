@@ -1,24 +1,28 @@
-import React, { useState } from 'react';
+import React, {
+  useState, memo, useCallback,
+} from 'react';
 import Input from '../components/input';
+import Searchresult from '../components/searchResult';
 import Select from '../components/select';
 import '../index.css';
+
+const units = [
+  {
+    value: 'C',
+    text: 'Celsius',
+  },
+  {
+    value: 'F',
+    text: 'Farenheit',
+  },
+];
 
 const Weather = () => {
   const [location, setLocation] = useState('');
   const [cities, setCities] = useState([]);
   const [selectedCity, setSelectedCity] = useState(null);
   const [unit, setUnit] = useState('C');
-  const units = [
-    {
-      value: 'C',
-      text: 'Celsius',
-    },
-    {
-      value: 'F',
-      text: 'Farenheit',
-    },
-  ];
-  const loadCities = async (city) => {
+  const loadCities = useCallback(async (city) => {
     try {
       const res = await fetch(`https://api.weatherserver.com/weather/cities/${city}`);
       const json = await res.json();
@@ -27,8 +31,8 @@ const Weather = () => {
     } catch (error) {
       console.log(error);
     }
-  };
-  const getCityInfo = async (cityId) => {
+  }, []);
+  const getCityInfo = useCallback(async (cityId) => {
     try {
       const res = await fetch(`https://api.weatherserver.com/weather/current/${cityId}/${unit}`);
       const json = await res.json();
@@ -38,15 +42,16 @@ const Weather = () => {
     } catch (error) {
       console.log(error);
     }
-  };
-  const onChangeLocationInput = (event) => {
+  }, [unit]);
+  const onChangeLocationInput = useCallback((event) => {
     const city = event.target.value;
     setLocation(city);
     loadCities(city);
-  };
-  const onUnitChange = (event) => {
+  }, [loadCities]);
+  const onUnitChange = useCallback((event) => {
     setUnit(event.target.value);
-  };
+  }, []);
+  console.log('weather html render');
   return (
     <div className="flex justify-center">
       <div className="weather-app bg-[#FAFAFA] h-screen border-4 p-4 w-3/6">
@@ -59,28 +64,7 @@ const Weather = () => {
         </div>
         {location.length > 0
           && (
-          <div className="weather-city-dropdown relative">
-            <div className="absolute dropdown-result bg-[#FFFFFF] flex w-full h-20 p-2">
-              <div className="flex items-center justify-center space-x-6 px-4">
-                {cities.length === 0 && (
-                  <li><a href="#!">city details not found</a></li>
-                )}
-                {
-                    cities.map((city) => (
-                      <div
-                        className="dropdown-results"
-                        key={city.name}
-                        onClick={() => getCityInfo(city.id)}
-                        role="button"
-                      >
-                        {city.name}
-                      </div>
-                    ))
-                  }
-
-              </div>
-            </div>
-          </div>
+          <Searchresult cities={cities} getCityInfo={getCityInfo} />
           )}
         <div className="weather-city-display flex">
           <div className="city-name flex flex-col">
@@ -116,4 +100,4 @@ const Weather = () => {
   );
 };
 
-export default Weather;
+export default memo(Weather);
