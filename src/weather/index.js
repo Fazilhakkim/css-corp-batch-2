@@ -5,52 +5,11 @@ import React, {
 import Input from '../components/input';
 import Searchresult from '../components/searchResult';
 import Select from '../components/select';
+import TemperatureResults from '../components/temperature-results';
+import { units } from '../constants/variables';
 import '../index.css';
+import { weatherInitValue, weatherReducer } from '../reducers/weatherReducers';
 
-const units = [
-  {
-    value: 'C',
-    text: 'Celsius',
-  },
-  {
-    value: 'F',
-    text: 'Farenheit',
-  },
-];
-
-const weatherInitValue = {
-  location: '',
-  cities: [],
-  selectedCity: null,
-  unit: 'C',
-  loading: false,
-  error: null,
-};
-const weatherReducer = (state, { type, payload }) => {
-  console.log(`state values${state}`);
-  switch(type) {
-    case 'CHANGE_LOCATION':
-      return { ...state, location: payload };
-    case 'CHANGE_UNIT':
-      return { ...state, unit: payload };
-    case 'LOAD_CITY':
-      return {
-        ...state, cities: payload, loading: false, error: null,
-      };
-    case 'LOAD_SELECTED_CITY':
-      return {
-        ...state, selectedCity: payload, location: '', loading: false, error: null,
-      };
-    case 'LOAD_CITY_REQUEST':
-    case 'LOAD_SELECTED_CITY_REQUEST':
-      return { ...state, loading: true };
-    case 'LOAD_CITY_FAIL':
-    case 'LOAD_SELECTED_CITY_FAIL':
-      return { ...state, error: payload, loading: false };
-    default:
-      break;
-  }
-};
 const Weather = () => {
   /* const [location, setLocation] = useState('');
   const [cities, setCities] = useState([]);
@@ -93,7 +52,7 @@ const Weather = () => {
     dispatch({ type: 'CHANGE_UNIT', payload: event.target.value });
   }, []);
   const {
-    location: cityLocation, conditions, icon, temp, temp_min, temp_max,
+    location: cityLocation, conditions, icon, temp, temp_min, temp_max, pressure, humidity,
   } = selectedCity || {};
   console.log('weather html render');
   return (
@@ -125,32 +84,13 @@ const Weather = () => {
           </div>
         </div>
         {cityLocation && (
-        <div className="weather-details">
-          <div className="weather-temperature flex justify-between">
-            <div className="weather-info px-3 py-1 bg-gradient-to-r from-pink-500 to-rose-500 text-white rounded-lg flex flex-col justify-center text-center">
-              <p>Current Temperature</p>
-              <p>{temp}</p>
-            </div>
-            <div className="weather-info px-3 py-1 bg-gradient-to-r from-pink-500 to-rose-500 text-white rounded-lg flex flex-col justify-center text-center">
-              <p>Maximum Temperature</p>
-              <p>{temp_max}</p>
-            </div>
-            <div className="weather-info px-3 py-1 bg-gradient-to-r from-pink-500 to-rose-500 text-white rounded-lg flex flex-col justify-center text-center">
-              <p>Minimum Temperature</p>
-              <p>{temp_min}</p>
-            </div>
-          </div>
-          <div className='weather-wind flex justify-between'>
-            <div className="weather-info px-3 py-1 bg-gradient-to-r from-pink-500 to-rose-500 text-white rounded-lg flex flex-col justify-center text-center">
-              <p>Current Temperature</p>
-              <p>{temp}</p>
-            </div>
-            <div className="weather-info px-3 py-1 bg-gradient-to-r from-pink-500 to-rose-500 text-white rounded-lg flex flex-col justify-center text-center">
-              <p>Current Temperature</p>
-              <p>{temp}</p>
-            </div>
-          </div>
-        </div>
+          <TemperatureResults
+            temp={temp}
+            temp_max={temp_max}
+            temp_min={temp_min}
+            pressure={pressure}
+            humidity={humidity}
+          />
         )}
       </div>
     </div>
