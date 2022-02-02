@@ -13,6 +13,8 @@ const Input = ({
   ...props
 }: Props) => {
   const isError = !!(touched[field.name] && errors[field.name]);
+  console.log('shopping input before redux');
+  
   return (
     <div>
       <label htmlFor={field.name} className="sr-only">
