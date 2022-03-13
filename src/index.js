@@ -1,11 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import weatherServer from './server';
-import Weather from './weather';
-
-weatherServer();
+import ProdData from './data-api';
 
 ReactDOM.render(
-  <Weather />,
+  <ProdData />,
   document.getElementById('root'),
 );
